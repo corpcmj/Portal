@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CMJ Corporation | Contact</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body data-page="contact">
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="index.html"><img src="img/Logo.png" alt="CMJ Corporation logo" /><span>CMJ Corporation</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html" data-link="home">Home</a></li>
+        <li><a href="about.html" data-link="about">About Us</a></li>
+        <li><a href="services.html" data-link="services">Services</a></li>
+        <li><a href="products.html" data-link="products">Products</a></li>
+        <li><a href="projects.html" data-link="projects">Projects</a></li>
+        <li><a href="videos.html" data-link="videos">Videos</a></li>
+        <li><a href="contact.html" data-link="contact">Contact</a></li>
+        <li><a href="login.html" data-role="login-link">Login</a></li>
+        <li><a href="admin.html" data-role="admin-link" class="hidden">Admin</a></li>
+        <li><a href="#" data-role="logout-link" class="hidden">Logout</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Contact Details</h1>
+      <p>For project inquiries, pricing requests, and collaboration opportunities, contact CMJ Corporation through the channels below.</p>
+    </section>
+
+    <section class="card">
+      <p><strong>Address:</strong> <span data-contact="address"></span></p>
+      <p><strong>Email:</strong> <span data-contact="email"></span></p>
+      <p><strong>Phone:</strong> <span data-contact="phone"></span></p>
+      <p><strong>Facebook:</strong> <a data-contact="facebook" target="_blank" rel="noopener"></a></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="inner">
+      <strong>CMJ Corporation</strong><br />
+      Address: <span data-contact="address"></span><br />
+      Email: <span data-contact="email"></span> | Phone: <span data-contact="phone"></span><br />
+      Facebook: <a data-contact="facebook" target="_blank" rel="noopener"></a>
+    </div>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

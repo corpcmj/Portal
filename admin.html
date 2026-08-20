@@ -1,0 +1,172 @@
+    <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CMJ Corporation | Admin Maintenance Panel</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body data-page="admin">
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="index.html"><img src="img/Logo.png" alt="CMJ Corporation logo" /><span>CMJ Corporation</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html" data-link="home">Home</a></li>
+        <li><a href="about.html" data-link="about">About Us</a></li>
+        <li><a href="services.html" data-link="services">Services</a></li>
+        <li><a href="products.html" data-link="products">Products</a></li>
+        <li><a href="projects.html" data-link="projects">Projects</a></li>
+        <li><a href="videos.html" data-link="videos">Videos</a></li>
+        <li><a href="contact.html" data-link="contact">Contact</a></li>
+        <li><a href="login.html" data-role="login-link">Login</a></li>
+        <li><a href="admin.html" data-role="admin-link">Admin</a></li>
+        <li><a href="#" data-role="logout-link">Logout</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Maintenance Panel</h1>
+      <p>Manage products, slideshows, YouTube links, and maintenance announcements from this admin page.</p>
+     <p>Upload the pictures first on Github.</p>
+      <p>https://raw.githubusercontent.com/corpcmj/Image/main/FileName.jpg Use this format on URL</p>
+    </section>
+
+    <section class="admin-grid">
+      <article class="card">
+        <h2>Product Management</h2>
+        <form id="productForm">
+          <input type="hidden" id="productId" name="productId" />
+          <label for="productName">Product Name</label>
+          <input id="productName" name="name" type="text" required />
+
+          <label for="productDesc">Description</label>
+          <textarea id="productDesc" name="description" required></textarea>
+
+          <label for="productSpecs">Dimensions / Specs</label>
+          <textarea id="productSpecs" name="specs" required></textarea>
+
+          <label for="productImageUrl">Image URL</label>
+          <input id="productImageUrl" name="imageUrl" type="url" placeholder="https://..." required />
+
+          <button type="submit">Save Product</button>
+        </form>
+        <p id="productMsg" class="notice"></p>
+        <div id="productList"></div>
+      </article>
+
+      <article class="card">
+        <h2>Service Management</h2>
+        <form id="serviceForm">
+          <input type="hidden" id="serviceId" name="serviceId" />
+          <label for="serviceName">Service Name</label>
+          <input id="serviceName" name="name" type="text" required />
+
+          <label for="serviceDesc">Description</label>
+          <textarea id="serviceDesc" name="description" required></textarea>
+
+          <button type="submit">Save Service</button>
+        </form>
+        <p id="serviceMsg" class="notice"></p>
+        <div id="serviceList"></div>
+      </article>
+
+      <article class="card">
+        <h2>Project List Managements</h2>
+        <form id="projectEntryForm">
+          <input type="hidden" id="projectEntryId" name="projectEntryId" />
+
+          <label for="projectEntryType">Project Status</label>
+          <select id="projectEntryType" name="type">
+            <option value="finished">Finished Project</option>
+            <option value="ongoing">Ongoing Project</option>
+          </select>
+
+          <label for="projectEntryName">Project Name</label>
+          <input id="projectEntryName" name="name" type="text" required />
+
+          <button type="submit">Save Project Entry</button>
+        </form>
+        <p id="projectEntryMsg" class="notice"></p>
+        <div id="projectEntryList"></div>
+      </article>
+
+      <article class="card">
+        <h2>Slideshow Management</h2>
+        <form id="slideForm">
+          <label for="slideType">Select Page Slideshow</label>
+          <select id="slideType" name="slideType">
+            <option value="home">Home</option>
+            <option value="projects">Projects</option>
+            <option value="team">About Us - Team</option>
+            <option value="products">Products</option>
+          </select>
+
+          <label for="slideCaption">Caption</label>
+          <input id="slideCaption" name="slideCaption" type="text" placeholder="Optional caption" />
+
+          <label for="slideImageUrls">Image URL(s)</label>
+          <textarea id="slideImageUrls" name="slideImageUrls" rows="4" placeholder="One URL per line" required></textarea>
+
+          <button type="submit">Add Slides</button>
+        </form>
+        <p id="slideMsg" class="notice"></p>
+        <div id="slideList"></div>
+      </article>
+
+      <article class="card">
+        <h2>YouTube Video Management</h2>
+        <form id="videoForm">
+          <input type="hidden" id="videoId" name="videoId" />
+
+          <label for="videoTitle">Title</label>
+          <input id="videoTitle" name="title" type="text" />
+
+          <label for="videoUrl">YouTube URL / Embed Link</label>
+          <input id="videoUrl" name="url" type="url" required />
+
+          <button type="submit">Save Video Link</button>
+        </form>
+        <p id="videoMsg" class="notice"></p>
+        <div id="videoList"></div>
+      </article>
+
+      <article class="card">
+        <h2>Maintenance Announcement</h2>
+        <p class="notice">This message will appear as a banner on the homepage for <strong>all visitors in real time</strong> via Firebase.</p>
+        <form id="maintenanceForm">
+          <label for="maintenanceMessage">Announcement Text</label>
+          <textarea id="maintenanceMessage" name="message" rows="3" placeholder="e.g. We are currently under maintenance. Please check back later."></textarea>
+
+          <label class="toggle-label">
+            <input id="maintenanceActive" name="active" type="checkbox" />
+            Show banner on homepage
+          </label>
+
+          <button type="submit">Save &amp; Publish</button>
+        </form>
+        <p id="maintenanceMsg" class="notice"></p>
+      </article>
+
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="inner">
+      <strong>CMJ Corporation</strong><br />
+      Address: <span data-contact="address"></span><br />
+      Email: <span data-contact="email"></span> | Phone: <span data-contact="phone"></span><br />
+      Facebook: <a data-contact="facebook" target="_blank" rel="noopener"></a>
+    </div>
+  </footer>
+
+  <script src="assets/app.js"></script>
+
+  <!-- Firebase Realtime Database (compat CDN) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="assets/firebase.js"></script>
+</body>
+</html>
