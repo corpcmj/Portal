@@ -1,17 +1,17 @@
 :root {
-  --bg: #0e131a;
-  --bg-soft: #151c26;
-  --card: #1c2531;
-  --text: #f3f6fb;
-  --muted: #b5c0cf;
-  --line: #2c3a4d;
-  --primary: #2d7ff9;
-  --primary-soft: #79aefc;
-  --silver: #c7ced9;
-  --success: #18b572;
+  --bg: #ffffff;
+  --bg-soft: #f3f6f9;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #4b5563;
+  --line: #e5e7eb;
+  --primary: #1d4ed8;
+  --primary-soft: #2563eb;
+  --silver: #6b7280;
+  --success: #15803d;
   --danger: #b91c1c;
   --radius: 14px;
-  --shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
+  --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
 }
 
 * {
@@ -21,7 +21,7 @@
 body {
   margin: 0;
   font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
-  background: linear-gradient(180deg, #0b1016 0%, #101721 100%);
+  background: #ffffff;
   color: var(--text);
   line-height: 1.6;
 }
@@ -44,9 +44,9 @@ img {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(10, 15, 23, 0.86);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .nav-wrap {
@@ -66,7 +66,7 @@ img {
   font-weight: 800;
   font-size: 1.02rem;
   letter-spacing: 0.3px;
-  color: #fff;
+  color: var(--text);
 }
 
 .brand img {
@@ -97,7 +97,7 @@ img {
 
 .nav-links a:hover,
 .nav-links a.active {
-  color: #fff;
+  color: var(--text);
 }
 
 .container {
@@ -176,7 +176,7 @@ img {
 }
 
 .card {
-  background: linear-gradient(145deg, rgba(33, 42, 57, 0.86), rgba(22, 31, 43, 0.86));
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -238,7 +238,7 @@ img {
   position: relative;
   overflow: hidden;
   border-radius: 12px;
-  background: #101a28;
+  background: #f8fafc;
   min-height: 260px;
   border: 1px solid var(--line);
 }
@@ -293,7 +293,7 @@ img {
 
 .product-card,
 .project-card {
-  background: linear-gradient(145deg, rgba(33, 42, 57, 0.86), rgba(22, 31, 43, 0.86));
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: var(--shadow);
@@ -331,9 +331,9 @@ textarea,
 select {
   width: 100%;
   border-radius: 10px;
-  border: 1px solid #33445a;
-  background: rgba(255, 255, 255, 0.02);
-  color: #fff;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: var(--text);
   padding: 0.75rem 0.85rem;
 }
 
@@ -360,7 +360,7 @@ button:hover {
 button.outline {
   background: transparent;
   border-color: var(--silver);
-  color: #fff;
+  color: var(--text);
 }
 
 button.danger {
@@ -380,7 +380,7 @@ button.success {
   border: 1px solid var(--line);
   border-radius: 10px;
   margin-bottom: 0.6rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-soft);
 }
 
 .list-item img {
@@ -430,7 +430,7 @@ button.success {
   border-top: 1px solid var(--line);
   padding: 1.2rem 1rem;
   color: var(--muted);
-  background: rgba(8, 13, 20, 0.72);
+  background: #ffffff;
 }
 
 .footer .inner {
