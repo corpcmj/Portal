@@ -229,7 +229,8 @@
     track.innerHTML = slides
       .map(
         (s) => `
-      <article class="slide-item" style="background-image:url('${normalizeImageUrl(s.src)}')">
+      <article class="slide-item">
+        <img src="${escapeHtml(normalizeImageUrl(s.src))}" alt="${escapeHtml(s.caption || "Slideshow image")}" />
         <div class="slide-caption">${escapeHtml(s.caption || "")}</div>
       </article>`
       )
