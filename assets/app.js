@@ -5,15 +5,17 @@
     projectEntries: "cmj_project_entries",
     slides: "cmj_slides",
     videos: "cmj_videos",
+    contact: "cmj_contact",
     auth: "cmj_logged_in"
   };
 
-  const contact = {
+  const defaultContact = {
     address: "L2 B2 Fidela Herrera Subd., Brgy. Santol, Tanza, Cavite",
     email: "cmjalcorp@gmail.com",
     phone: "+63 917 541 1920",
     facebook: "https://www.facebook.com/cmjcorp"
   };
+  let contact = { ...defaultContact };
 
   const defaults = {
     products: [
@@ -196,6 +198,7 @@
         [KEYS.projectEntries, defaults.projectEntries],
         [KEYS.slides,         defaults.slides],
         [KEYS.videos,         defaults.videos],
+        [KEYS.contact,        defaultContact],
       ];
       pairs.forEach(([key, val]) => {
         db.ref(key).once('value', (snap) => {
@@ -206,6 +209,7 @@
             if (cachedRaw && hasSameContent(cloudValue, val) && !hasSameContent(cachedValue, val)) {
               db.ref(key).set(cachedValue).then(() => {
                 localStorage.setItem(key, JSON.stringify(cachedValue));
+                if (key === KEYS.contact) setContactDetails(cachedValue);
                 showCloudSyncMessage("Restored this browser's saved content to Firebase.");
               }).catch((err) => {
                 console.error('[CMJ Firebase] migration failed for', key, ':', err.message);
@@ -213,12 +217,14 @@
               });
             } else {
               localStorage.setItem(key, JSON.stringify(cloudValue));
+              if (key === KEYS.contact) setContactDetails(cloudValue);
               showCloudSyncMessage("Connected to Firebase. Shared content loaded.");
             }
           } else {
             const cachedValue = localStorage.getItem(key);
             const initialValue = cachedValue ? read(key, val) : val;
             localStorage.setItem(key, JSON.stringify(initialValue));
+            if (key === KEYS.contact) setContactDetails(initialValue);
             if (cachedValue) {
               db.ref(key).set(initialValue).then(() => {
                 showCloudSyncMessage("Saved browser data to Firebase. It will now be available in Incognito.");
@@ -242,10 +248,13 @@
       if (!localStorage.getItem(KEYS.projectEntries)) write(KEYS.projectEntries, defaults.projectEntries);
       if (!localStorage.getItem(KEYS.slides))         write(KEYS.slides,         defaults.slides);
       if (!localStorage.getItem(KEYS.videos))         write(KEYS.videos,         defaults.videos);
+      if (!localStorage.getItem(KEYS.contact))        write(KEYS.contact,        defaultContact);
+      setContactDetails(read(KEYS.contact, defaultContact));
     }
   }
 
-  function setFooter() {
+  function setContactDetails(value) {
+    contact = { ...defaultContact, ...(value || {}) };
     document.querySelectorAll("[data-contact='address']").forEach((el) => (el.textContent = contact.address));
     document.querySelectorAll("[data-contact='email']").forEach((el) => (el.textContent = contact.email));
     document.querySelectorAll("[data-contact='phone']").forEach((el) => (el.textContent = contact.phone));
@@ -253,6 +262,18 @@
       el.setAttribute("href", contact.facebook);
       el.textContent = contact.facebook;
     });
+
+    const form = document.getElementById("contactForm");
+    if (form) {
+      form.address.value = contact.address;
+      form.email.value = contact.email;
+      form.phone.value = contact.phone;
+      form.facebook.value = contact.facebook;
+    }
+  }
+
+  function setFooter() {
+    setContactDetails(read(KEYS.contact, defaultContact));
   }
 
   function setActiveNav() {
@@ -556,6 +577,42 @@
     initProjectEntryAdmin();
     initSlideshowAdmin();
     initVideoAdmin();
+    initContactAdmin();
+  }
+
+  function initContactAdmin() {
+    const form = document.getElementById("contactForm");
+    const msg = document.getElementById("contactMsg");
+    if (!form || !msg) return;
+
+    setContactDetails(read(KEYS.contact, defaultContact));
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const details = {
+        address: form.address.value.trim(),
+        email: form.email.value.trim(),
+        phone: form.phone.value.trim(),
+        facebook: form.facebook.value.trim()
+      };
+      let facebookUrl;
+      try {
+        facebookUrl = new URL(details.facebook);
+      } catch {
+        msg.textContent = "Enter a valid Facebook URL starting with https://.";
+        msg.classList.add("error");
+        return;
+      }
+      if (facebookUrl.protocol !== "https:" && facebookUrl.protocol !== "http:") {
+        msg.textContent = "Facebook URL must use http:// or https://.";
+        msg.classList.add("error");
+        return;
+      }
+
+      setContactDetails(details);
+      write(KEYS.contact, details);
+      msg.textContent = "Contact details saved.";
+      msg.classList.remove("error");
+    });
   }
 
   function initProductAdmin() {
@@ -1012,11 +1069,17 @@ form.addEventListener("submit", (e) => {
     try {
       const parsed = new URL(url);
       if (parsed.hostname.includes("youtu.be")) {
-        return parsed.pathname.replace("/", "") || "";
+        return parsed.pathname.split("/").filter(Boolean)[0] || "";
       }
-      if (parsed.pathname.includes("/embed/")) {
-        return parsed.pathname.split("/embed/")[1]?.split("/")[0] || "";
+
+      const path = parsed.pathname.split("/").filter(Boolean);
+      const videoPathIndex = path.findIndex((segment) =>
+        ["embed", "shorts", "live"].includes(segment)
+      );
+      if (videoPathIndex !== -1) {
+        return path[videoPathIndex + 1] || "";
       }
+
       return parsed.searchParams.get("v") || "";
     } catch {
       return "";

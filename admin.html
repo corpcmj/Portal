@@ -28,7 +28,7 @@
   <main class="container">
     <section class="hero">
       <h1>Maintenance Panel</h1>
-      <p>Manage products, slideshows, YouTube links, and maintenance announcements from this admin page.</p>
+      <p>Manage products, services, projects, slideshows, YouTube links, announcements, and contact details from this admin page.</p>
      <p>Upload the pictures first on Github.</p>
       <p>https://raw.githubusercontent.com/corpcmj/Image/main/FileName.jpg Use this format on URL</p>
     </section>
@@ -151,6 +151,26 @@
         <p id="maintenanceMsg" class="notice"></p>
       </article>
 
+      <article class="card">
+        <h2>Contact Details Management</h2>
+        <p class="notice">Update the contact information displayed throughout the website.</p>
+        <form id="contactForm">
+          <label for="contactAddress">Address</label>
+          <input id="contactAddress" name="address" type="text" required />
+
+          <label for="contactEmail">Email</label>
+          <input id="contactEmail" name="email" type="email" required />
+
+          <label for="contactPhone">Phone</label>
+          <input id="contactPhone" name="phone" type="tel" required />
+
+          <label for="contactFacebook">Facebook URL</label>
+          <input id="contactFacebook" name="facebook" type="url" required />
+
+          <button type="submit">Save Contact Details</button>
+        </form>
+        <p id="contactMsg" class="notice" role="status" aria-live="polite"></p>
+      </article>
 
     </section>
   </main>
