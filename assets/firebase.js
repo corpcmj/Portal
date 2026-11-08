@@ -7,16 +7,16 @@
   // ── 1. Configuration ────────────────────────────────────────────────────────
 
   const firebaseConfig = {
-  apiKey: "AIzaSyBd2pUI9SanuiAHc5YhtJ3WLodXp42zU9M",
-  authDomain: "cmjcorpsite.firebaseapp.com",
+  apiKey: "AIzaSyB6lMFtC4G2Qvd6zeoiXnUVKJFvl_Bhwko",
+  authDomain: "cmalluminum.firebaseapp.com",
   databaseURL:
-  "https://cmjcorpsite-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "cmjcorpsite",
-  storageBucket: "cmjcorpsite.firebasestorage.app",
-  messagingSenderId: "801752320480",
-  appId: "1:801752320480:web:b677917554ee6c8f760385",
-  measurementId: "G-F6Z8WP6K7B"
-};
+    "https://cmalluminum-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "cmalluminum",
+  storageBucket: "cmalluminum.firebasestorage.app",
+  messagingSenderId: "685030789113",
+  appId: "1:685030789113:web:8d3136c36662aafebf3728",
+  measurementId: "G-XKB8B14TS0"
+  };
 
   // ── 2. Initialize (guard against double-init on hot-reloads) ───────────────
   if (!firebase.apps.length) {
