@@ -263,13 +263,10 @@
       el.textContent = contact.facebook;
     });
 
-    const form = document.getElementById("contactForm");
-    if (form) {
-      form.address.value = contact.address;
-      form.email.value = contact.email;
-      form.phone.value = contact.phone;
-      form.facebook.value = contact.facebook;
-    }
+    Object.keys(contact).forEach((field) => {
+      const input = document.getElementById(`contact${field[0].toUpperCase()}${field.slice(1)}`);
+      if (input) input.value = contact[field];
+    });
   }
 
   function setFooter() {
@@ -581,37 +578,40 @@
   }
 
   function initContactAdmin() {
-    const form = document.getElementById("contactForm");
     const msg = document.getElementById("contactMsg");
-    if (!form || !msg) return;
+    if (!msg) return;
 
     setContactDetails(read(KEYS.contact, defaultContact));
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const details = {
-        address: form.address.value.trim(),
-        email: form.email.value.trim(),
-        phone: form.phone.value.trim(),
-        facebook: form.facebook.value.trim()
-      };
-      let facebookUrl;
-      try {
-        facebookUrl = new URL(details.facebook);
-      } catch {
-        msg.textContent = "Enter a valid Facebook URL starting with https://.";
-        msg.classList.add("error");
-        return;
-      }
-      if (facebookUrl.protocol !== "https:" && facebookUrl.protocol !== "http:") {
-        msg.textContent = "Facebook URL must use http:// or https://.";
-        msg.classList.add("error");
-        return;
-      }
+    document.querySelectorAll("[data-contact-form]").forEach((form) => {
+      const field = form.dataset.contactForm;
+      const input = form.querySelector("input");
+      if (!input) return;
 
-      setContactDetails(details);
-      write(KEYS.contact, details);
-      msg.textContent = "Contact details saved.";
-      msg.classList.remove("error");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const value = input.value.trim();
+        if (field === "facebook") {
+          let facebookUrl;
+          try {
+            facebookUrl = new URL(value);
+          } catch {
+            msg.textContent = "Enter a valid Facebook URL starting with https://.";
+            msg.classList.add("error");
+            return;
+          }
+          if (facebookUrl.protocol !== "https:" && facebookUrl.protocol !== "http:") {
+            msg.textContent = "Facebook URL must use http:// or https://.";
+            msg.classList.add("error");
+            return;
+          }
+        }
+
+        const details = { ...read(KEYS.contact, defaultContact), [field]: value };
+        setContactDetails(details);
+        write(KEYS.contact, details);
+        msg.textContent = `${field[0].toUpperCase()}${field.slice(1)} updated.`;
+        msg.classList.remove("error");
+      });
     });
   }
 

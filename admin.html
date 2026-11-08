@@ -153,21 +153,29 @@
 
       <article class="card">
         <h2>Contact Details Management</h2>
-        <p class="notice">Update the contact information displayed throughout the website.</p>
-        <form id="contactForm">
+        <p class="notice">Save each contact detail separately. Updating one field will leave the others unchanged.</p>
+        <form id="contactAddressForm" data-contact-form="address">
           <label for="contactAddress">Address</label>
           <input id="contactAddress" name="address" type="text" required />
+          <button type="submit">Save Address</button>
+        </form>
 
+        <form id="contactEmailForm" data-contact-form="email">
           <label for="contactEmail">Email</label>
           <input id="contactEmail" name="email" type="email" required />
+          <button type="submit">Save Email</button>
+        </form>
 
+        <form id="contactPhoneForm" data-contact-form="phone">
           <label for="contactPhone">Phone</label>
           <input id="contactPhone" name="phone" type="tel" required />
+          <button type="submit">Save Phone</button>
+        </form>
 
+        <form id="contactFacebookForm" data-contact-form="facebook">
           <label for="contactFacebook">Facebook URL</label>
           <input id="contactFacebook" name="facebook" type="url" required />
-
-          <button type="submit">Save Contact Details</button>
+          <button type="submit">Save Facebook URL</button>
         </form>
         <p id="contactMsg" class="notice" role="status" aria-live="polite"></p>
       </article>
