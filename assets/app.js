@@ -101,6 +101,7 @@
     ]
   };
 
+  const cloudSyncErrors = new Set();
   const page = document.body.dataset.page || "";
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -138,19 +139,55 @@
     }
   }
 
+  function hasSameContent(value, reference) {
+    const withoutIds = (item) => {
+      if (Array.isArray(item)) return item.map(withoutIds);
+      if (item && typeof item === "object") {
+        return Object.keys(item)
+          .filter((key) => key !== "id")
+          .sort()
+          .reduce((result, key) => {
+            result[key] = withoutIds(item[key]);
+            return result;
+          }, {});
+      }
+      return item;
+    };
+
+    return JSON.stringify(withoutIds(value)) === JSON.stringify(withoutIds(reference));
+  }
+
   function write(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
     if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) {
-      firebase.database().ref(key).set(value).catch((err) => {
-        console.error('[CMJ Firebase] write failed for', key, ':', err.message);
-      });
+      firebase.database().ref(key).set(value)
+        .then(() => showCloudSyncMessage("Changes synced to Firebase."))
+        .catch((err) => {
+          console.error('[CMJ Firebase] write failed for', key, ':', err.message);
+          showCloudSyncMessage(`Saved only in this browser. Cloud sync failed: ${err.message}`, true);
+        });
+    } else {
+      showCloudSyncMessage("Saved only in this browser. Firebase is unavailable, so this will not appear in Incognito.", true);
     }
+  }
+
+  function showCloudSyncMessage(message, isError = false) {
+    const status = document.getElementById("cloudSyncMsg");
+    if (!status) return;
+    if (isError) cloudSyncErrors.add(message);
+    if (cloudSyncErrors.size) {
+      status.textContent = Array.from(cloudSyncErrors).join(" ");
+      status.classList.add("error");
+      return;
+    }
+    status.textContent = message;
+    status.classList.remove("error");
   }
 
   function seed() {
     if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) {
       // Firebase is available: sync each key from the database.
-      // If the database node is empty (first-ever run), write the defaults.
+      // If the database node is empty, migrate this browser's saved data first.
       // Otherwise pull the live value into localStorage so the first render is correct.
       const db = firebase.database();
       const pairs = [
@@ -163,11 +200,39 @@
       pairs.forEach(([key, val]) => {
         db.ref(key).once('value', (snap) => {
           if (snap.exists()) {
-            localStorage.setItem(key, JSON.stringify(snap.val()));
+            const cloudValue = snap.val();
+            const cachedRaw = localStorage.getItem(key);
+            const cachedValue = cachedRaw ? read(key, val) : null;
+            if (cachedRaw && hasSameContent(cloudValue, val) && !hasSameContent(cachedValue, val)) {
+              db.ref(key).set(cachedValue).then(() => {
+                localStorage.setItem(key, JSON.stringify(cachedValue));
+                showCloudSyncMessage("Restored this browser's saved content to Firebase.");
+              }).catch((err) => {
+                console.error('[CMJ Firebase] migration failed for', key, ':', err.message);
+                showCloudSyncMessage(`Could not restore browser data to Firebase: ${err.message}`, true);
+              });
+            } else {
+              localStorage.setItem(key, JSON.stringify(cloudValue));
+              showCloudSyncMessage("Connected to Firebase. Shared content loaded.");
+            }
           } else {
-            db.ref(key).set(val).catch(() => {});
-            localStorage.setItem(key, JSON.stringify(val));
+            const cachedValue = localStorage.getItem(key);
+            const initialValue = cachedValue ? read(key, val) : val;
+            localStorage.setItem(key, JSON.stringify(initialValue));
+            if (cachedValue) {
+              db.ref(key).set(initialValue).then(() => {
+                showCloudSyncMessage("Saved browser data to Firebase. It will now be available in Incognito.");
+              }).catch((err) => {
+                console.error('[CMJ Firebase] seed failed for', key, ':', err.message);
+                showCloudSyncMessage(`Could not sync browser data to Firebase: ${err.message}`, true);
+              });
+            } else {
+              showCloudSyncMessage("Connected to Firebase. Default content is shown until shared content is saved.");
+            }
           }
+        }, (err) => {
+          console.error('[CMJ Firebase] read failed for', key, ':', err.message);
+          showCloudSyncMessage(`Could not read from Firebase: ${err.message}`, true);
         });
       });
     } else {

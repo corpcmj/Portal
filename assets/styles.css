@@ -209,6 +209,10 @@ img {
   color: var(--muted);
 }
 
+.notice.error {
+  color: #b91c1c;
+}
+
 /* ── Maintenance / Announcement Banner ─────────────────────────────────── */
 .maintenance-banner {
   position: sticky;
