@@ -165,6 +165,19 @@ img {
   object-fit: cover;
   min-height: 440px;
 }
+
+.hero-logo {
+  width: min(100%, 420px);
+  justify-self: center;
+}
+
+.hero-logo img {
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  min-height: 0;
+  object-fit: contain;
+}
 .grid {
   display: grid;
   gap: 1.3rem;
