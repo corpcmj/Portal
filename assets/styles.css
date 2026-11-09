@@ -73,10 +73,12 @@ img {
 }
 
 .brand img {
-  width: 36px;
-  height: 36px;
+  width: auto;
+  height: auto;
+  max-width: 120px;
+  max-height: 48px;
   border-radius: 10px;
-  object-fit: cover;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
